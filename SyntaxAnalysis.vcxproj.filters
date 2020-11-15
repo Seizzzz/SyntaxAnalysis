@@ -21,12 +21,21 @@
     <ClCompile Include="LL1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="follow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LR.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LL1.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="LR1.h">
+    <ClInclude Include="follow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LR.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
