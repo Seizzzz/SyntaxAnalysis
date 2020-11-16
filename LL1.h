@@ -33,8 +33,10 @@ public:
 	int getNonTermNum(string&);
 
 	void analyse(string);
+	void error();
 
 	class Follow FOLLOW;
 
 	LL1(string);
+	~LL1();
 };

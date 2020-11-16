@@ -86,8 +86,8 @@ int LL1::splitNum(string s)
 				if (isdigit(c))
 					state = 2;
 				break;
-			case 2:
-				if (isdigit(c))                                     //整数
+			case 2: //整数
+				if (isdigit(c))
 					state = 2;
 				else if (c == '.')
 					state = 3;
@@ -96,7 +96,7 @@ int LL1::splitNum(string s)
 				else
 					return p;
 				break;
-			case 3:                                                 //小数点状态
+			case 3: //小数点状态
 				if (isdigit(c))
 					state = 4;
 				else
@@ -110,7 +110,7 @@ int LL1::splitNum(string s)
 				else
 					return p;
 				break;
-			case 5:                                                 //指数状态
+			case 5: //指数
 				if (c == '+' || c == '-')
 					state = 6;
 				else if (isdigit(c))
@@ -118,13 +118,13 @@ int LL1::splitNum(string s)
 				else
 					return p;
 				break;
-			case 6:                                                 //指数上的符号
+			case 6: //指数符号
 				if (isdigit(c))
 					state = 7;
 				else
 					return p;
 				break;
-			case 7:                                                  //指数上的数字
+			case 7: //指数数字
 				if (isdigit(c))
 					state = 7;
 				else
@@ -144,8 +144,8 @@ vector<string> LL1::getFirst(string s)
 	if (s[1] == '\'') s0 = s.substr(0, 2);
 	else s0 = s.substr(0, 1);
 	
-	if (isTerminal(s)) res.push_back(s);
-	else if (isTerminal(s0)) res.push_back(s0);
+	if (isTerminal(s)) res.push_back(s); //num
+	else if (isTerminal(s0)) res.push_back(s0); //+ - * /
 	else //非终结符
 	{
 		for(auto syx:syntax)
@@ -261,22 +261,14 @@ void LL1::generateTable()
 				{
 					if (table[FOLLOW.getNum(syx.first)][getTermNum(j)].empty())
 						table[FOLLOW.getNum(syx.first)][getTermNum(j)] = syx.first + "->" + syx.second;
-					else
-					{
-						cout << "Failed in constructing LL(1)" << endl;
-						exit(-1);
-					}
+					else error();
 				}
 			}
 			else //FIRST集不含致空符
 			{
-				if(table[FOLLOW.getNum(syx.first)][getTermNum(i)].empty())
+				if (table[FOLLOW.getNum(syx.first)][getTermNum(i)].empty())
 					table[FOLLOW.getNum(syx.first)][getTermNum(i)] = syx.first + "->" + syx.second;
-				else
-				{
-					cout << "Failed in constructing LL(1)" << endl;
-					exit(-1);
-				}
+				else error();
 			}
 		}
 	}
@@ -309,16 +301,21 @@ int LL1::getTermNum(string& index)
 	else if (index == "*") return 5;
 	else if (index == "/") return 6;
 	else if (index == "num") return 7;
-	else
-	{
-		cout << "ERR" << endl;
-		exit(0);
-	}
+	else error();
 }
 
 int LL1::getNonTermNum(string& s)
 {
-	return FOLLOW.getNum(s);
+	int ret;
+	try
+	{
+		ret = FOLLOW.getNum(s);
+	}
+	catch (const char* msg)
+	{
+		throw msg;
+	}
+	return ret;
 }
 
 void LL1::analyse(string s)
@@ -347,24 +344,29 @@ void LL1::analyse(string s)
 			stk.pop();
 
 			auto dis = syx.find("->") + 2;
-			
+
 			auto temp = splitNonTerminal(syx.substr(dis, syx.length() - dis));
 			for (int i = temp.size() - 1; i >= 0; --i) stk.push(temp[i]);
 		}
-		else
-		{
-			cout << "ERR" << endl;
-			exit(0);
-		}
+		else error();
 	}
 	cout << "ACC" << endl;
+}
+
+void LL1::error()
+{
+	throw "ERR";
 }
 
 LL1::LL1(string s)
 {
 	load();
 	generateTable();
-	printTable();
+	//printTable();
 
 	analyse(s + "$");
+}
+
+LL1::~LL1()
+{
 }

@@ -7,6 +7,8 @@ vector<string>& Follow::operator[](string index)
 	else if (index == "T") return T;
 	else if (index == "T'") return T1;
 	else if (index == "F") return F;
+
+	throw "ERR";
 }
 
 vector<string>& Follow::operator[](int index)
@@ -18,11 +20,7 @@ vector<string>& Follow::operator[](int index)
 		case 2: return T;
 		case 3: return T1;
 		case 4: return F;
-		default:
-		{
-			cout << "ERR" << endl;
-			exit(0);
-		}
+		default: throw "ERR";
     }
 }
 
@@ -33,11 +31,8 @@ int Follow::getNum(string& index)
 	else if (index == "T") return 2;
 	else if (index == "T'") return 3;
 	else if (index == "F") return 4;
-	else
-	{
-		cout << "ERR" << endl;
-		exit(0);
-	}
+
+	throw "ERR";
 }
 
 Follow::Follow()
